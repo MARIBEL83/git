@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Formulario de registro</title>
+		<meta charset="UTF-8">
+		<script src="../JS/botones.js"></script>
+		<link rel="stylesheet" href="../../util/styles.css">
+	</head>
+	<body>
+		<h1>Formulario de registro</h1>
+
+		<form method="post" action="../php/guardar.php">
+			<label for="tiempo">Tiempo:</label>
+			<input type="date" id="fecha" name="fecha" required><br><br>
+
+			
+
+			<input type="submit" class="btn btn-primary" value="Guardar">
+		</form>
+		<button id="miBoton" class="btn btn-primary" type="button" onclick="volver()">Volver</button>
+	</body>
+</html>

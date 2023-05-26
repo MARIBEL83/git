@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tabla de usuarios</title>
+    <meta charset="UTF-8">
+    <script src="../JS/botones.js"></script>
+    <link rel="stylesheet" href="../../util/styles.css">
+    <!-- DataTable css -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+  </head>
+  <body>
+    <h1>Tabla de cesta</h1>
+
+    <table id="tabla_ventas">
+      <thead>
+        <tr>
+          <th>Tiempo</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <!-- Bootstrap -->
+    <script src="../../util/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        var obtenerDatos = function(tbody, table){
+          $(tbody).on("click", "#editar", function(){
+            var data = table.row( $(this).parents("tr") ).data();
+            console.log(data);   
+            function editarCesta(id) {
+              localStorage.setItem("id", id);// Manda el id a actualizar.html
+            }
+            editarVenta(data.id);// Se ejecuta la función
+            window.location.href = "actualizar.html";// Se abre una nueva ventana
+          });
+        }
+
+        // Configuración de DataTables
+        var table = $('#tabla_cesta').DataTable({
+          "drawCallback": function( settings ) {
+            $('.pagination').addClass("pagination-sm");
+          },
+          "ajax": "../php/datos.php",
+          "columns": [
+            {"data": "Tiempo"},
+           
+            {"defaultContent": "<button id='editar' class='btn btn-primary'><img src='../../util/img/lapizImg.png' width='20px' height='20px'></button><button id='eliminar'class='btn btn-primary'><img src='../../util/img/eliminarImg.png' width='20px' height='20px'></button>"}
+          ],
+          "error": function(xhr, error, thrown) {
+            console.log("Error al obtener los datos: " + error);
+          }
+        });
+
+        obtenerDatos("#tabla_ventas tbody", table);
+
+        var obtenerId = function(tbody, table){
+          $(tbody).on("click", "#eliminar", function(){
+            var data = table.row( $(this).parents("tr") ).data();
+            if(confirm("¿Estás seguro de que quieres eliminar a esta cesta?")) {
+              $.ajax({
+                url: '../php/borrar.php',
+                type: 'POST',
+                data: { id: data.id },
+                success: function(response) {
+                  console.log(response);
+                  table.ajax.reload();
+                },
+                error: function(xhr, error, thrown) {
+                  console.log("Error al eliminar la cesta: " + error);
+                }
+              });
+            }
+          });
+        }
+        obtenerId("#tabla_cesta tbody", table);
+        $('#tabla_cesta').addClass('table table-striped table-bordered');
+      });
+    </script>
+      <button id="miBoton" class="btn btn-house" onclick="inicio()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+          <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+          <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+        </svg>
+      </button>
+      <button id="miBoton" class="btn btn-primary" onclick="añadir()">Añadir</button>
+  </body>
+</html>

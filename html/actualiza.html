@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Formulario de actualización de datos</title>
+        <meta charset="UTF-8">
+        <script src="../JS/botones.js"></script>
+        <link rel="stylesheet" href="../../util/styles.css">
+    </head>
+
+    <body>
+        <h1>Formulario de actualización</h1>
+
+        <form method="post" action="../php/actualizar.php">
+            <label for="idusuario">idususario:</label>
+            <input type="number" id="idusuario" name="idusuario" required><br><br>
+
+            <label for="tiempo">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required><br><br>
+        </form>
+
+        <script src="../../util/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Obtenemos el id del usuario seleccionado desde el datatable.hmtl
+                var idUsuario = localStorage.getItem("idUsuario");
+                console.log("La Id recibida es: " + idUsuario);
+
+                // Realizamos una petición AJAX para obtener los datos del usuario
+                $.ajax({
+                    url: "../php/datos.php",
+                    method: "POST",
+                    data: { id: id },
+                    dataType: "json",
+                    success: function (data) {
+                        // Llenamos los campos del formulario con los datos obtenidos
+                        $("#id").val(data.data[0].id);
+                        $("#tiempo").val(data.data[0].Tiempo);
+                        
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        </script>
+        <button id="miBoton" class="btn btn-primary" type="button" onclick="volver()">Volver</button>
+    </body>
+</html>
